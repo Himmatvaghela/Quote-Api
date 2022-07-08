@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Project </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+        integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body{
+            background-color: skyblue;
+        }
+       
+        .container {
+            width: 50vw;
+            height: 50vw;
+            /* margin: auto; */
+            border: 2px solid black;
+            background-color: #607d8b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .inner {
+            width: 70%;
+            height: 70%;
+            background-color: white;
+            border: 2px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 8px 3px lightgrey;
+        }
+
+        /* .box{
+            width: 20vw;
+            height: 5vw;
+        } */
+        .button {
+            width: 100%;
+            height: 12%;
+            background-color: antiquewhite;
+            /* border: 2px solid yellow; */
+            position: absolute;
+            bottom: 0;
+        }
+
+        #newQ {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 2rem;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #tweetMe {
+            width: 100%;
+            height: 7%;
+            position: absolute;
+            top: -24px;
+            background-color: antiquewhite;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .text {
+            width: 80%;
+            height: 70%;
+            /* border: 2px solid red; */
+            text-align: center;
+            position: relative;
+        }
+
+        .start-quote {
+            font-size: 1rem;
+            color: red;
+            left: -3vw;
+            position: absolute;
+        }
+
+        #quotes {
+            font-size: 1.5rem;
+            position: absolute;
+            top: 4vw;
+            font-style: italic;
+            color: red;
+        }
+
+        #author {
+            font-size: .9rem;
+            position: absolute;
+            top: 17vw;
+            right: -24px;
+            font-style: italic;
+            color: black;
+        }
+
+        @media screen and (max-width : 700px) {
+            .container{
+                width: 75vw;
+                height: 70vh;
+            }
+            #quotes{
+                font-size: 1rem;
+            }
+            #author{
+                top: 30vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="quotes"></div>
+    <div id="author"></div>
+    <button id="newQ">New quotes</button>
+    <button id="tweetMe">tweet </button> -->
+
+    <div class="container">
+        <div class="inner" data-aos="zoom-in">
+            <!-- <div class="box"> -->
+            <p class="number" id="tweetMe">Tweet On Tweeter</p>
+            <div class="text">
+                <i class="start-quote fas fa-quote-left"></i>
+                <p id="quotes" class="quotes"></p>
+                <p class="author" id="author"></p>
+            </div>
+            <!-- </div> -->
+
+            <label class="button">
+                <p id="newQ">New Quotes</p>
+            </label>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+         AOS.init();
+
+        let quotes = document.getElementById("quotes");
+        let author = document.getElementById("author");
+        let newQ = document.getElementById("newQ");
+        let tweetMe = document.getElementById("tweetMe")
+
+        let realdata = "";
+        let quotesData = "";
+        const getNewQuotes = () => {
+            let rnum = Math.floor(Math.random() * 1600);
+            quotesData = realdata[rnum];
+            quotes.innerText = `${quotesData.text}`;
+            author.innerText = `- ${quotesData.author}`;
+            if (quotesData.author == null) {
+                author.innerText = "- unknown"
+            }
+        }
+
+        const getQuotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api)
+                realdata = await data.json();
+                getNewQuotes()
+            } catch (error) {
+
+            }
+
+        }
+        getQuotes();
+
+        newQ.addEventListener('click', () => {
+            quotes.innerText = getQuotes()
+        })
+
+        tweetMe.addEventListener('click', tweetnow = () => {
+            let tweetpost = `https://twitter.com/intent/tweet?text=${quotesData.text}`;
+            window.open(tweetpost)
+        })
+    </script>
+</body>
+
+</html>
